@@ -1,23 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import { useQuery, gql } from "@apollo/client";
+import "./App.css";
+
+const GET_LAUNCHES = gql`
+  query GetLaunches {
+    launches(limit: 5) {
+      static_fire_date_utc
+      launch_success
+      rocket {
+        rocket_name
+      }
+      links {
+        flickr_images
+      }
+      details
+      id
+      mission_name
+    }
+  }
+`;
 
 function App() {
+  const { loading, error, data } = useQuery(GET_LAUNCHES);
+
+  console.log(data);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Something went wrong.</p>;
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="header">
+        <h1>Space X Launches</h1>
+      </div>
+      <div className="launches-container">
+        {data.launches.map((launche) => (
+          <div key={launche.id} className="launches-card">
+            <h2>{launche.mission_name}</h2>
+            <h3>{launche.rocket.rocket_name}</h3>
+            <div className="launches-card-frame">
+              <img
+                src={launche.links.flickr_images}
+                alt={launche.mission_name}
+                className="launches-card-image"
+              />
+            </div>
+            <p>{launche.details}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
