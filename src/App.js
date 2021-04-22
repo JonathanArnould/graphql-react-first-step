@@ -28,7 +28,7 @@ function App() {
   return (
     <div className="App">
       <div className="header">
-        <h1>Space X Launches</h1>
+        <h1>SpaceX Launches</h1>
       </div>
       <div className="launches-container">
         {data.launches.map((launche) => (
@@ -43,6 +43,7 @@ function App() {
               />
             </div>
             <p>{launche.details}</p>
+            <div className="fade-bottom"></div>
           </div>
         ))}
       </div>
